@@ -16,6 +16,8 @@ class jnl_header:
         self.msecond = header[14:17]
         self.kind = header[17:18]
         self.dataLen = header[18:26]
+    def data_len(self):
+        return int(self.dataLen)
 
 
 def printHeader(jnlh):
@@ -42,8 +44,7 @@ def dumpStream():
             break
         jnlh = jnl_header(header)
         printHeader(jnlh)
-        data_len = jnlh.dataLen
-        data = stdin.read(int(data_len))
+        data = stdin.read(jnlh.data_len())
         printData(data)
 
 def asciiDumpArgs(argc,argv):
@@ -66,7 +67,7 @@ def main(argc, argv):
     if argc== 1:
         isUseStdin = 1
     elif argc == 2 and argv[1] == "-h":
-        print("Usage : %s ファイル名\n", argv[0])
+        print("Usage : %s ファイル名\n" % argv[0])
         sys.exit()
 
     if isUseStdin:
